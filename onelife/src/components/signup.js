@@ -155,9 +155,9 @@ class RegistrationForm extends React.Component {
     return (
       <div className="Main">
         <Link to="/">
-          <h2 style={{ color: "white" }} className="top-right">
+          <h4 style={{ color: "white" }} className="top-right">
             Already Signed up ? Log in
-          </h2>
+          </h4>
         </Link>
         <div className="bg"></div>
         <div className="centered">
