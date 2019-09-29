@@ -53,3 +53,9 @@ def message_view(request):
         messages = Message.objects.all()
         serializers = MessageSerializer(messages, many=True)
         return JsonResponse(serializers.data, safe=False)
+
+    if(request.method == "POST"):
+
+        # username = request.POST.hospital
+        print(request.POST)
+        return JsonResponse({"status": 200})

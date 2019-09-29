@@ -77,7 +77,10 @@ class SignInSide extends React.Component {
         password
       }
     }).then(function(response) {
-      console.log("Submitting : ", response);
+      console.log("Submitting : ", response.status);
+      if (response.data.status == 200) {
+        localStorage.setItem("username", username);
+      }
     });
   };
 

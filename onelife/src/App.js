@@ -1,5 +1,5 @@
 import React from "react";
-
+import Hospital from "./components/hospital";
 import WrappedRegistrationForm from "./components/signup";
 import SignInSide from "./components/signin";
 import GoogleMap from "./components/map";
@@ -13,6 +13,7 @@ class App extends React.Component {
           <Route path="/signup" component={WrappedRegistrationForm} />
           <Route exact path="/" component={SignInSide} />
           <Route path="/find" component={GoogleMap} />
+          <Route path="/messages/:repo" component={Hospital} />
         </Switch>
       </Router>
     );

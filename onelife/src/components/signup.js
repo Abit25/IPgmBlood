@@ -79,8 +79,13 @@ class RegistrationForm extends React.Component {
         type,
         email
       }
-    }).then(function(response) {
+    }).then(response => {
       console.log("Submitting : ", response);
+      if (response.data.status == 200) {
+        this.props.history.push("/");
+      } else {
+        alert("User with this username already exists !");
+      }
     });
   };
 

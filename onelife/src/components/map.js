@@ -1,5 +1,4 @@
 import React, { Component, createRef } from "react";
-import { func } from "prop-types";
 import {
   Navbar,
   Nav,
@@ -8,7 +7,8 @@ import {
   Col,
   Popover,
   OverlayTrigger,
-  Spinner
+  Spinner,
+  Button
 } from "react-bootstrap";
 import img2 from "./heart.png";
 import img from "./question.png";
@@ -291,9 +291,24 @@ class GoogleMap extends Component {
                 id="hospitalsel"
                 disabled
                 style={{ width: "38vw", marginTop: "2vh" }}
-                placeholder={this.state.hospitalsel || "Hospital"}
-                value={this.state.hospitalsel || "Hospital"}
+                placeholder={this.state.hospitalsel || "Choose a Hospital"}
+                value={this.state.hospitalsel || "Choose a Hospital"}
               />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Button
+                variant="danger"
+                style={{
+                  width: "25vw",
+                  marginTop: "10vh",
+                  marginLeft: "5vw",
+                  height: "8vh"
+                }}
+              >
+                Help Me
+              </Button>
             </Col>
           </Row>
         </Form>
