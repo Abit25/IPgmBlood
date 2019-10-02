@@ -11,9 +11,9 @@ class Hospital extends Component {
     console.log(this.props.match.params.repo);
     const formData = new FormData();
     formData.append("hospital", this.props.match.params.repo);
-    axios.post("http://127.0.0.1:8000/messages/", formData).then(messages => {
-      console.log(messages.data);
-      // this.setState({ messages: messages.data });
+    axios.post("http://127.0.0.1:8000/messages/", formData).then(res => {
+      console.log(res.data.messages);
+      this.setState({ messages: res.data.messages });
     });
   }
   render() {
@@ -28,11 +28,7 @@ class Hospital extends Component {
         >
           <Alert.Heading>{message.username}</Alert.Heading>
 
-          <p>
-            Change this and that and try again. Duis mollis, est non commodo
-            luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-            Cras mattis consectetur purus sit amet fermentum.
-          </p>
+          <p>Blood Group : {message.bloodgrp}</p>
         </Alert>
       ));
     } else {

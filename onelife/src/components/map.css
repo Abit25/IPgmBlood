@@ -1,0 +1,24 @@
+#my-form {
+  position: absolute;
+  right: 5vw;
+  top: 15vh;
+}
+
+#google-map {
+  width: 50vw;
+  height: 50vh;
+  margin-top: 5vh;
+  margin-left: 3vw;
+}
+
+@media only screen and (max-width: 600px) {
+  #google-map {
+    width: 80vw;
+  }
+
+  #my-form {
+    position: absolute;
+    left: 5vw;
+    top: 100vh;
+  }
+}

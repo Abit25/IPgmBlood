@@ -6,6 +6,7 @@ from django.conf import settings
 from .serializers import MessageSerializer
 from .models import User, Hospital, Message
 import json
+from django.core import serializers
 # Create your views here.
 
 
@@ -57,5 +58,10 @@ def message_view(request):
     if(request.method == "POST"):
 
         # username = request.POST.hospital
-        print(request.POST)
-        return JsonResponse({"status": 200})
+
+        hospital = request.POST['hospital']
+        print(hospital)
+        hospital = Hospital.objects.get(name__contains=str(hospital))
+        messages = Message.objects.filter(hospital=hospital)
+        messages = MessageSerializer(messages, many=True)
+        return JsonResponse({"status": 200, "messages": messages.data})

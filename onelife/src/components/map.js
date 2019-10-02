@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import img2 from "./heart.png";
 import img from "./question.png";
+import "./map.css";
 
 const popover = (
   <Popover id="popover-basic">
@@ -47,37 +48,6 @@ class GoogleMap extends Component {
     this.state = {};
     this.googleMapRef = createRef();
   }
-
-  myHospitals = () => {
-    console.log("Calling", this.state.hospitals);
-    if (this.state.hospitals) {
-      this.state.hospitals.map(hospital => {
-        return (
-          <div
-            style={{
-              width: "25px",
-              height: "25px",
-              backgroundColor: "black",
-              position: "absolute",
-              top: "75vh",
-              left: "20vw"
-            }}
-            key={`default-radio`}
-            // className="mb-3"
-          >
-            {/* <Form.Check
-              type={"radio"}
-              id={`default-radio`}
-              label={`{hospital.name}`}
-            /> */}
-            Hello World
-          </div>
-        );
-      });
-    } else {
-      return "";
-    }
-  };
 
   componentDidMount() {
     const googleMapScript = document.createElement("script");
@@ -134,6 +104,15 @@ class GoogleMap extends Component {
 
       var service = new window.google.maps.places.PlacesService(this.googleMap);
       service.textSearch(request, this.callback);
+      var geocoder = new window.google.maps.Geocoder();
+
+      geocoder.geocode({ location: myLatLng }, function(results, status) {
+        if (status === "OK") {
+          if (results[0]) {
+            console.log(results[0].formatted_address);
+          }
+        }
+      });
     });
   };
 
@@ -210,18 +189,9 @@ class GoogleMap extends Component {
             />
           </Nav.Link>
         </Navbar>
-        <div
-          id="google-map"
-          ref={this.googleMapRef}
-          style={{
-            width: "50vw",
-            height: "50vh",
-            marginTop: "5vh",
-            marginLeft: "3vw"
-          }}
-        />
+        <div id="google-map" ref={this.googleMapRef} />
         <Example />
-        <Form style={{ position: "absolute", right: "5vw", top: "15vh" }}>
+        <Form id="my-form">
           <Row>
             <Col>
               <Form.Control
