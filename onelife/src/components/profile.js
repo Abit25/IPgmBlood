@@ -253,6 +253,17 @@ export default class Profile extends React.Component {
               <Form.Control placeholder="Any regular medications you require(Include dosage) :" />
             </Col>
           </Row>
+          <Row style={{ marginTop: "3vh" }}>
+            <Col>
+              <Form.Label as="legend">
+                <b>Please choose a profile picture</b>
+              </Form.Label>
+            </Col>
+            <Col>
+              <Form.Control type="file" />
+            </Col>
+            <Col></Col>
+          </Row>
           <Row style={{ marginTop: "3vh", textAlign: "center" }}>
             <Col>
               <Button style={{ width: "15vw" }} variant="primary">

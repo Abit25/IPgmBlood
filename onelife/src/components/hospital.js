@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import { Navbar, Nav, Alert } from "react-bootstrap";
+import { Navbar, Nav, Alert, Form } from "react-bootstrap";
 import img2 from "./heart.png";
 import { Button } from "@material-ui/core";
 import axios from "axios";
 
 class Hospital extends Component {
-  state = { show: true };
+  state = { show: true, messages: [] };
   constructor(props) {
     super(props);
+    if (!localStorage.getItem("user_id")) {
+      this.props.history.push("");
+    }
     console.log(this.props.match.params.repo);
     const formData = new FormData();
     formData.append("hospital", this.props.match.params.repo);
@@ -16,9 +19,10 @@ class Hospital extends Component {
       this.setState({ messages: res.data.messages });
     });
   }
+
   render() {
     var messages;
-    if (this.state.messages) {
+    if (this.state.messages.length > 0) {
       console.log(this.state.messages);
       messages = this.state.messages.map(message => (
         <Alert
@@ -27,8 +31,11 @@ class Hospital extends Component {
           style={{ width: "90vw", marginLeft: "5vw", marginTop: "5vh" }}
         >
           <Alert.Heading>{message.username}</Alert.Heading>
-
+          <hr />
           <p>Blood Group : {message.bloodgrp}</p>
+          <p>Age : {message.age}</p>
+          <p>Symtoms: {message.symptoms}</p>
+          <p>Address : {message.address}</p>
         </Alert>
       ));
     } else {
@@ -44,19 +51,25 @@ class Hospital extends Component {
           <Navbar.Brand href="#home">
             <img
               alt=""
-              src="/logo.svg"
+              src={img2}
               width="30"
               height="30"
               className="d-inline-block align-top"
+              style={{ marginRight: "1vw" }}
             />
             {"One Life"}
           </Navbar.Brand>
-          <Nav.Link href="#home">
-            <img
-              src={img2}
-              style={{ height: "40px", width: "40px", textAlign: "right" }}
-            />
-          </Nav.Link>
+          <Navbar.Collapse className="justify-content-end">
+            <Button
+              style={{ color: "white" }}
+              onClick={e => {
+                localStorage.removeItem("user_id");
+                this.props.history.push("/");
+              }}
+            >
+              LogOut, {localStorage.getItem("user_id")}
+            </Button>
+          </Navbar.Collapse>
         </Navbar>
         {messages}
       </div>

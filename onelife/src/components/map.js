@@ -13,6 +13,7 @@ import {
 import img2 from "./heart.png";
 import img from "./question.png";
 import "./map.css";
+import axios from "axios";
 
 const popover = (
   <Popover id="popover-basic">
@@ -45,7 +46,7 @@ const Example = () => (
 class GoogleMap extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { symptoms: [] };
     this.googleMapRef = createRef();
   }
 
@@ -106,10 +107,11 @@ class GoogleMap extends Component {
       service.textSearch(request, this.callback);
       var geocoder = new window.google.maps.Geocoder();
 
-      geocoder.geocode({ location: myLatLng }, function(results, status) {
+      geocoder.geocode({ location: myLatLng }, (results, status) => {
         if (status === "OK") {
           if (results[0]) {
             console.log(results[0].formatted_address);
+            this.setState({ address: results[0].formatted_address });
           }
         }
       });
@@ -134,6 +136,30 @@ class GoogleMap extends Component {
   selHospital = e => {
     console.log(e.target.value);
     this.setState({ hospitalsel: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.persist();
+    if (!this.state.address) {
+      alert("Please wait for the map to load");
+    } else {
+      console.log("State is ", this.state);
+      var fd = new FormData();
+      fd.append("fname", this.state.fname);
+      fd.append("lname", this.state.lname);
+      fd.append("address", this.state.address);
+      fd.append("selHospital", this.state.hospitalsel);
+      fd.append("phone", this.state.phone);
+      fd.append("age", this.state.age);
+      fd.append("symptoms", this.state.symptoms);
+      axios.post("http://127.0.0.1:8000/request/", fd).then(function(response) {
+        console.log(response);
+        if (response.data.status == 200) {
+          console.log("Button ", e.target.value);
+          e.target.innerHTML = "Sent ";
+        }
+      });
+    }
   };
 
   render() {
@@ -191,16 +217,25 @@ class GoogleMap extends Component {
         </Navbar>
         <div id="google-map" ref={this.googleMapRef} />
         <Example />
-        <Form id="my-form">
+        <Form id="my-form" onSubmit={this.onSubmit}>
           <Row>
             <Col>
               <Form.Control
                 style={{ width: "18vw" }}
                 placeholder="First name"
+                onChange={e => {
+                  this.setState({ fname: e.target.value });
+                }}
               />
             </Col>
             <Col>
-              <Form.Control style={{ width: "18vw" }} placeholder="Last name" />
+              <Form.Control
+                style={{ width: "18vw" }}
+                placeholder="Last name"
+                onChange={e => {
+                  this.setState({ lname: e.target.value });
+                }}
+              />
             </Col>
           </Row>
           <Row>
@@ -208,19 +243,37 @@ class GoogleMap extends Component {
               <Form.Control
                 style={{ width: "18vw", marginTop: "4vh" }}
                 placeholder="Phone Number"
+                onChange={e => {
+                  this.setState({ phone: e.target.value });
+                }}
               />
             </Col>
             <Col>
               <Form.Control
                 style={{ width: "18vw", marginTop: "4vh" }}
                 placeholder="Age"
+                onChange={e => {
+                  this.setState({ age: e.target.value });
+                }}
               />
             </Col>
           </Row>
           <Row style={{ marginTop: "3vh", width: "7vw" }}>
             <Col>
               <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Bleeding" />
+                <Form.Check
+                  type="checkbox"
+                  label="Bleeding"
+                  name="Bleeding"
+                  onChange={e => {
+                    var t = e.target.checked;
+                    if (t) {
+                      var sym = this.state.symptoms;
+                      sym.push(e.target.name);
+                      this.setState({ symptoms: sym });
+                    }
+                  }}
+                />
               </Form.Group>
             </Col>
           </Row>
@@ -230,6 +283,15 @@ class GoogleMap extends Component {
                 <Form.Check
                   type="checkbox"
                   label="Severe Bleeding/Concussion"
+                  name="Severe Bleeding/Concussion"
+                  onChange={e => {
+                    var t = e.target.checked;
+                    if (t) {
+                      var sym = this.state.symptoms;
+                      sym.push(e.target.name);
+                      this.setState({ symptoms: sym });
+                    }
+                  }}
                 />
               </Form.Group>
             </Col>
@@ -237,21 +299,57 @@ class GoogleMap extends Component {
           <Row style={{ width: "7vw" }}>
             <Col>
               <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Unconscious" />
+                <Form.Check
+                  type="checkbox"
+                  label="Unconscious"
+                  name="Unconscious"
+                  onChange={e => {
+                    var t = e.target.checked;
+                    if (t) {
+                      var sym = this.state.symptoms;
+                      sym.push(e.target.name);
+                      this.setState({ symptoms: sym });
+                    }
+                  }}
+                />
               </Form.Group>
             </Col>
           </Row>
           <Row style={{ width: "10vw" }}>
             <Col>
               <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Animal Bite" />
+                <Form.Check
+                  type="checkbox"
+                  label="Animal Bite"
+                  name="Animal Bite"
+                  onChange={e => {
+                    var t = e.target.checked;
+                    if (t) {
+                      var sym = this.state.symptoms;
+                      sym.push(e.target.name);
+                      this.setState({ symptoms: sym });
+                    }
+                  }}
+                />
               </Form.Group>
             </Col>
           </Row>
           <Row style={{ width: "10vw" }}>
             <Col>
               <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Heart Attack" />
+                <Form.Check
+                  type="checkbox"
+                  label="Heart Attack"
+                  name="Heart Attack"
+                  onChange={e => {
+                    var t = e.target.checked;
+                    if (t) {
+                      var sym = this.state.symptoms;
+                      sym.push(e.target.name);
+                      this.setState({ symptoms: sym });
+                    }
+                  }}
+                />
               </Form.Group>
             </Col>
           </Row>
@@ -269,6 +367,7 @@ class GoogleMap extends Component {
           <Row>
             <Col>
               <Button
+                onClick={this.onSubmit}
                 variant="danger"
                 style={{
                   width: "25vw",

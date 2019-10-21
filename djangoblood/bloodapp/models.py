@@ -13,7 +13,7 @@ class Hospital(models.Model):
 
     name = models.CharField(max_length=50)
     address = models.TextField()
-    phone = models.IntegerField(blank=True)
+    phone = models.IntegerField(blank=True, null=True)
     lat = models.FloatField()
     long = models.FloatField()
 
@@ -25,10 +25,10 @@ class Message(models.Model):
     hospital = models.ForeignKey(
         Hospital, related_name='messages', on_delete=models.CASCADE)
     username = models.CharField(max_length=50)
-    dob = models.DateField()
+    age = models.IntegerField()
     bloodgrp = models.CharField(choices=choices, max_length=50)
-    lat = models.FloatField()
-    long = models.FloatField()
+    address = models.CharField(max_length=150)
+    symptoms = models.CharField(max_length=100)
 
 
 class User(AbstractUser):

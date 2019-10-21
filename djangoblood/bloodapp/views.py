@@ -19,10 +19,10 @@ def login_view(request):
         password = body['password']
         print('User ', username, "Password ", password)
         user = authenticate(username=username, password=password)
-
+        print(user)
         if user is not None:
             login(request, user)
-            return JsonResponse({'username': user.username, 'status': 200})
+            return JsonResponse({'username': user.username, 'status': 200, 'type': user.type})
         else:
             return JsonResponse({'status': 400})
 
@@ -60,8 +60,27 @@ def message_view(request):
         # username = request.POST.hospital
 
         hospital = request.POST['hospital']
+
+        hospital = Hospital.objects.get(name__contains=str(hospital.title()))
         print(hospital)
-        hospital = Hospital.objects.get(name__contains=str(hospital))
         messages = Message.objects.filter(hospital=hospital)
         messages = MessageSerializer(messages, many=True)
         return JsonResponse({"status": 200, "messages": messages.data})
+
+
+@csrf_exempt
+def message_send(request):
+    if(request.method == "POST"):
+        hospitalsel = request.POST['selHospital']
+
+        print(hospitalsel)
+        try:
+            new_hosp = Hospital.objects.get(name=hospitalsel)
+        except Hospital.DoesNotExist:
+
+            new_hosp = Hospital.objects.create(name=hospitalsel)
+        print(new_hosp)
+        name = request.POST["fname"]+" "+request.POST["lname"]
+        new_message = Message.objects.create(
+            hospital=new_hosp, username=name, age=request.POST["age"], bloodgrp="B+ve", symptoms=request.POST["symptoms"], address=request.POST["address"])
+        return JsonResponse({"status": 200})

@@ -68,7 +68,11 @@ class RegistrationForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     // console.log("State is :", this.state);
+
     const { username, password, email, type } = this.state;
+    if (!username || !password || !email || !type) {
+      alert("Please fill out all the required fields.");
+    }
 
     axios({
       method: "post",

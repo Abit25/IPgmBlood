@@ -76,10 +76,15 @@ class SignInSide extends React.Component {
         username,
         password
       }
-    }).then(function(response) {
-      console.log("Submitting : ", response.status);
+    }).then(response => {
+      console.log("Submitting : ", response);
       if (response.data.status == 200) {
-        localStorage.setItem("username", username);
+        localStorage.setItem("user_id", username);
+        if (response.data.type == "Hospital") {
+          var url = `/messages/${response.data.username}/`;
+          console.log("URL ", url);
+          this.props.history.push(url);
+        }
       }
     });
   };
@@ -137,11 +142,11 @@ class SignInSide extends React.Component {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
+                {/* <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
-                </Grid>
+                </Grid> */}
                 <Grid item>
                   <Links to="/signup">{"Don't have an account? Sign Up"}</Links>
                 </Grid>
