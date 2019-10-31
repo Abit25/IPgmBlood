@@ -29,21 +29,41 @@ class Message(models.Model):
     bloodgrp = models.CharField(choices=choices, max_length=50)
     address = models.CharField(max_length=150)
     symptoms = models.CharField(max_length=100)
+    is_registered = models.BooleanField(default=0)
 
 
 class User(AbstractUser):
     type = models.CharField(
         choices=[('Hospital', 'Hospital'), ('User', 'User')], max_length=500, blank=True)
 
+    def __str__(self):
+        return "Username: "+str(self.username)+" Email ID: "+str(self.email)
+
 
 class UserProfile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     dob = models.DateField()
+    add = models.CharField(max_length=100)
+    eno = models.CharField(max_length=10)
+    gender = models.CharField(max_length=200)
+    phyname = models.CharField(max_length=200)
+    phyno = models.CharField(max_length=10)
+    iname = models.CharField(max_length=200, blank=True)
+    polno = models.CharField(blank=True, max_length=25)
+    insdet = models.CharField(max_length=200, blank=True)
     bloodgrp = models.CharField(max_length=10, choices=choices)
     address = models.CharField(max_length=100)
-    phoneno = models.IntegerField()
-    aadharno = models.IntegerField(unique=True)
-    allergies = models.CharField(max_length=150)
-    alchohol = models.BooleanField()
-    diabetes = models.BooleanField()
+    phoneno = models.CharField(max_length=10)
+    aadharno = models.CharField(unique=True, max_length=10)
+    allergies = models.CharField(max_length=150, default="", blank=True)
+    alchohol = models.IntegerField(default=0, max_length=1)
+    diabetes = models.IntegerField(default=0, max_length=1)
+    cig = models.IntegerField(default=0, max_length=1)
+    imm = models.IntegerField(default=1, max_length=1)
+    regmed = models.CharField(max_length=200, default="", blank=True)
+    medinfo = models.CharField(max_length=200, default="", blank=True)
+    injuries = models.CharField(max_length=200, default="", blank=True)
+
+    def __str__(self):
+        return self.name

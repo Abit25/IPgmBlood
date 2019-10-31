@@ -49,15 +49,15 @@ class Hospital extends Component {
       <div>
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="#home">
+            {"One Life"}
             <img
               alt=""
               src={img2}
               width="30"
               height="30"
               className="d-inline-block align-top"
-              style={{ marginRight: "1vw" }}
+              style={{ marginLeft: "1vw" }}
             />
-            {"One Life"}
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
             <Button

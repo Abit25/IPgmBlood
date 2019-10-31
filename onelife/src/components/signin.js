@@ -69,6 +69,9 @@ class SignInSide extends React.Component {
     e.preventDefault();
     console.log("State is : ", this.state);
     const { username, password } = this.state;
+    if (!username || !password) {
+      alert("Please fill out all the required fields.");
+    }
     axios({
       method: "post",
       url: "http://127.0.0.1:8000/login/",
@@ -84,7 +87,13 @@ class SignInSide extends React.Component {
           var url = `/messages/${response.data.username}/`;
           console.log("URL ", url);
           this.props.history.push(url);
+        } else if (response.data.type == "User") {
+          var url = `/profile/${response.data.username}/`;
+          console.log("URL ", url);
+          this.props.history.push(url);
         }
+      } else {
+        alert("Please enter the correct credentials.");
       }
     });
   };

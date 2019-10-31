@@ -15,7 +15,7 @@ class App extends React.Component {
           <Route exact path="/" component={SignInSide} />
           <Route path="/find" component={GoogleMap} />
           <Route path="/messages/:repo" component={Hospital} />
-          <Route path="/profile" component={Profile} />
+          <Route path="/profile/:username" component={Profile} />
         </Switch>
       </Router>
     );

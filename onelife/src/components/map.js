@@ -74,48 +74,59 @@ class GoogleMap extends Component {
     return map;
   };
 
+  getPos = pos => {
+    var myLatLng = 0;
+    console.log("Position : ", pos);
+    myLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+    // console.log("2");
+    // console.log(this.googleMap);
+    // console.log(pos.coords.latitude, pos.coords.longitude);
+    var marker = new window.google.maps.Marker({
+      position: myLatLng,
+      map: this.googleMap,
+      title: "You are here"
+    });
+    this.googleMap.setCenter({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude
+    });
+    var pyrmont = new window.google.maps.LatLng(myLatLng.lat, myLatLng.long);
+    var request = {
+      location: pyrmont,
+      radius: "3000",
+      query: "hospital"
+    };
+
+    var service = new window.google.maps.places.PlacesService(this.googleMap);
+    service.textSearch(request, this.callback);
+    var geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode({ location: myLatLng }, (results, status) => {
+      if (status === "OK") {
+        if (results[0]) {
+          console.log(results[0].formatted_address);
+          this.setState({ address: results[0].formatted_address });
+        }
+      }
+    });
+  };
+
   createMarker = () => {
     // var myLatLng = { lat: 43.642567, lng: -79.387054 };
     // var marker = new window.google.maps.Marker({
     //   position: myLatLng,
     //   map: this.googleMap
     // });
-    var myLatLng = 0;
-    window.navigator.geolocation.getCurrentPosition(pos => {
-      myLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
-      // console.log("2");
-      // console.log(this.googleMap);
-      // console.log(pos.coords.latitude, pos.coords.longitude);
-      var marker = new window.google.maps.Marker({
-        position: myLatLng,
-        map: this.googleMap,
-        title: "You are here"
-      });
-      this.googleMap.setCenter({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      });
-      var pyrmont = new window.google.maps.LatLng(myLatLng.lat, myLatLng.long);
-      var request = {
-        location: pyrmont,
-        radius: "3000",
-        query: "hospital"
-      };
-
-      var service = new window.google.maps.places.PlacesService(this.googleMap);
-      service.textSearch(request, this.callback);
-      var geocoder = new window.google.maps.Geocoder();
-
-      geocoder.geocode({ location: myLatLng }, (results, status) => {
-        if (status === "OK") {
-          if (results[0]) {
-            console.log(results[0].formatted_address);
-            this.setState({ address: results[0].formatted_address });
-          }
-        }
-      });
-    });
+    var options = {
+      enableHighAccuracy: true
+    };
+    window.navigator.geolocation.getCurrentPosition(
+      this.getPos,
+      error => {},
+      options
+    );
   };
 
   callback = (results, status) => {

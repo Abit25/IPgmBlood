@@ -22,3 +22,24 @@
 .form-gradient input[type="password"]:focus:not([readonly]) + label {
   color: #4f4f4f;
 }
+
+.myform {
+  position: absolute;
+  top: 13vh;
+  right: 7vw;
+  marginleft: 2vw;
+}
+
+@media only screen and (max-width: 768px) {
+  .myform {
+    position: absolute;
+    top: 70%;
+    margin-left: 0px;
+    right: 25px;
+    width: 90%;
+  }
+
+  .submitbtn {
+    width: 70%;
+  }
+}
